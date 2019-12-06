@@ -1,8 +1,39 @@
 const router = require('express').Router();
 
-//GET /actions/:id - Returns all actions for a specified project.
-router.get('/:id', (req, res) => {
+const actionDB = require('../../data/helpers/actionModel');
 
+//GET /actions/all/:id - Returns all actions for a specified project.
+router.get('/all/:id', (req, res) => {
+  const id = req.params.id;
+
+  actionDB.getProjectActions(id)
+    .then(actions => {
+      if (actions.length > 0) {
+        res.status(200).json(actions);
+      } else {
+        res.status(404).json({ message: "No actions found" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ message: "Could not get actions from database", error: error });
+    });
+});
+
+//GET /actions/:id - Returns action by id.
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+
+  actionDB.get(id)
+    .then(action => {
+      if (action) {
+        res.status(200).json(action);
+      } else {
+        res.status(404).json({ message: "No action found" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ message: "Could not get action from database", error: error });
+    });
 });
 
 //POST /actions/:id - Creates a new action for a project.
