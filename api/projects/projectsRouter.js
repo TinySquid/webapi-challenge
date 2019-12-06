@@ -74,12 +74,8 @@ router.delete("/:id", validateProjectId, (req, res) => {
   const id = req.params.id;
 
   projectDB.remove(id)
-    .then(state => {
-      if (state) {
-        res.status(200).json({ message: "Project deleted" });
-      } else {
-        res.status(500).json({ message: "yeet" });
-      }
+    .then(() => {
+      res.status(200).json({ message: "Project deleted" });
     })
     .catch(error => {
       res.status(500).json({ message: "Could not delete project", error: error });
