@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const actionDB = require('../../data/helpers/actionModel');
+const projectDB = require('../../data/helpers/projectModel');
 
 //GET /actions/all/:id - Returns all actions for a specified project.
 router.get('/all/:id', (req, res) => {
@@ -51,6 +52,17 @@ router.delete("/:id", (req, res) => {
 
 });
 
+//MIDDLEWARE
+function validateAction(req, res, next) {
 
+}
+
+function validateActionId(req, res, next) {
+
+}
+
+function validateProjectId(req, res, next) {
+
+}
 
 module.exports = router;

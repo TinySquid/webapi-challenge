@@ -49,6 +49,13 @@ router.delete("/:id", (req, res) => {
 
 });
 
+//MIDDLEWARE
+function validateProject(req, res, next) {
 
+}
+
+function validateProjectId(req, res, next) {
+
+}
 
 module.exports = router;
