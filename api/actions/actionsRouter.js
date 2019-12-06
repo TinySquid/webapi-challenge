@@ -38,28 +38,65 @@ router.get('/:id', (req, res) => {
 });
 
 //POST /actions/:id - Creates a new action for a project.
-router.post('/:id', (req, res) => {
+router.post('/:id', validateProjectId, validateAction, (req, res) => {
+  const project_id = req.params.id;
+  const { description, notes, completed } = req.body;
 
+  actionDB.insert({
+    project_id: project_id,
+    description: description,
+    notes: notes,
+    completed: completed || false
+  })
+    .then(action => {
+      res.status(201).json(action);
+    })
+    .catch(error => {
+      res.status(500).json({ message: "Could not add action to database", error: error });
+    });
 });
 
 //PUT /actions/:id - Modifies an existing action by id.
-router.put('/:id', (req, res) => {
+router.put('/:id', validateActionId, (req, res) => {
+  const id = req.params.id;
+  const project_id = req.project_id;
+  const { description, notes, completed } = req.body;
 
+  actionDB.update(id, {
+    project_id: project_id,
+    description: description,
+    notes: notes,
+    completed: completed || false
+  })
+    .then(action => {
+      res.status(200).json(action);
+    })
+    .catch(error => {
+      res.status(500).json({ message: "Could not modify action", error: error });
+    });
 });
 
 //DELETE /actions/:id - Deletes an existing action by id.
-router.delete("/:id", (req, res) => {
+router.delete("/:id", validateActionId, (req, res) => {
+  const id = req.params.id;
 
+  actionDB.remove(id)
+    .then(() => {
+      res.status(200).json({ message: "Action deleted" });
+    })
+    .catch(error => {
+      res.status(500).json({ message: "Could not delete action", error: error });
+    });
 });
 
 //MIDDLEWARE
 function validateAction(req, res, next) {
-  const { project_id, description, notes } = req.body;
+  const { description, notes } = req.body;
 
-  if (project_id && description && notes) {
+  if (description && notes) {
     next();
   } else {
-    res.status(400).json({ message: "Please provide a project id, description, and notes" });
+    res.status(400).json({ message: "Please provide a description and notes" });
   }
 }
 
@@ -69,6 +106,7 @@ function validateActionId(req, res, next) {
   actionDB.get(id)
     .then(action => {
       if (action) {
+        req.project_id = action.project_id;
         next();
       } else {
         res.status(404).json({ message: "No action found" });
