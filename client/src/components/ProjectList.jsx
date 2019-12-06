@@ -11,7 +11,6 @@ function ProjectList(props) {
   useEffect(() => {
     axios.get("http://localhost:5000/api/projects")
       .then(response => {
-        console.log(response.data);
         setProjects(response.data);
       })
       .catch(error => console.log(error));

@@ -3,6 +3,7 @@ import { NavLink, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
 
 import ProjectList from './components/ProjectList';
+import DetailedProject from './components/DetailedProject';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,6 +17,7 @@ function App() {
       <Container>
         <Switch>
           <Route exact path="/" component={ProjectList} />
+          <Route path="/projects/:id" component={DetailedProject} />
         </Switch>
       </Container>
     </div>

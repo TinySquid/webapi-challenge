@@ -8,7 +8,7 @@ function Project({ id, name, description, completed }) {
   return (
     <Card>
       <CardBody>
-        <CardTitle>{name} {completed}</CardTitle>
+        <CardTitle>{name} {completed ? "(Complete)" : "(Incomplete)"}</CardTitle>
         <CardText>{description}</CardText>
       </CardBody>
     </Card>
