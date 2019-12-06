@@ -51,11 +51,29 @@ router.delete("/:id", (req, res) => {
 
 //MIDDLEWARE
 function validateProject(req, res, next) {
+  const { name, description } = req.body;
 
+  if (name && description) {
+    next();
+  } else {
+    res.status(400).json({ message: "Please provide a name and description" });
+  }
 }
 
 function validateProjectId(req, res, next) {
+  const id = req.params.id;
 
+  projectDB.get(id)
+    .then(project => {
+      if (project) {
+        next()
+      } else {
+        res.status(404).json({ message: "Project not found" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ message: "Could not get project from database", error: error });
+    });
 }
 
 module.exports = router;
