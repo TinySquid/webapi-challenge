@@ -1,8 +1,20 @@
 const router = require('express').Router();
 
+const projectDB = require('../../data/helpers/projectModel');
+
 //GET /projects - Returns all projects.
 router.get('/', (req, res) => {
-
+  projectDB.get()
+    .then(projects => {
+      if (projects) {
+        res.status(200).json(projects);
+      } else {
+        res.status(404).json({ message: "No projects found" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ message: "Could not get projects from database", error: error });
+    });
 });
 
 //POST /projects - Creates a new project.
