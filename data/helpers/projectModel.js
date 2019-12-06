@@ -1,5 +1,6 @@
 const db = require('../dbConfig.js');
 const mappers = require('./mappers');
+const actionModel = require('./actionModel');
 
 module.exports = {
   get,
@@ -14,7 +15,7 @@ function get(id) {
   if (id) {
     query.where('p.id', id).first();
 
-    const promises = [query, this.getProjectActions(id)]; // [ projects, actions ]
+    const promises = [query, actionModel.getProjectActions(id)]; // [ projects, actions ]
 
     return Promise.all(promises).then(function (results) {
       let [project, actions] = results;

@@ -17,6 +17,23 @@ router.get('/', (req, res) => {
     });
 });
 
+//GET /projects/:id - Returns all projects.
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+
+  projectDB.get(id)
+    .then(project => {
+      if (project) {
+        res.status(200).json(project);
+      } else {
+        res.status(404).json({ message: "No project found" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ message: "Could not get project from database", error: error });
+    });
+});
+
 //POST /projects - Creates a new project.
 router.post('/', (req, res) => {
 
